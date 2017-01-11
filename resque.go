@@ -2,6 +2,7 @@ package resque
 
 import (
 	"encoding/json"
+
 	"github.com/kavu/go-resque/driver"
 )
 
@@ -47,4 +48,9 @@ func (enqueuer *RedisEnqueuer) Enqueue(queue, jobClass string, args ...jobArg) (
 	}
 
 	return enqueuer.drv.ListPush(queue, string(jobJSON))
+}
+
+//PlainEnqueue is dirty hack to make a [{}] JSON struct
+func (enqueuer *RedisEnqueuer) PlainEnqueue(queue, args string) (int64, error) {
+	return enqueuer.drv.ListPush(queue, args)
 }
